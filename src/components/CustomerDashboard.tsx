@@ -47,7 +47,7 @@ export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
   onRefreshBookings,
 }) => {
   const { profile, updateProfileDetails, signOut } = useAuth();
-  const [activeTab, setActiveTab] = useState<'bookings' | 'profile'>('bookings');
+  const [activeTab, setActiveTab] = useState<'bookings' | 'profile' | 'loyalty'>('bookings');
 
   // Bookings state
   const [userBookings, setUserBookings] = useState<BookingItem[]>([]);
