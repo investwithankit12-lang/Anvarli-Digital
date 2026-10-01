@@ -1,0 +1,8 @@
+{
+  "name": "Remix Trim \u0026 Twisted - Luxury Unisex Salon",
+  "description": "Trim \u0026 Twisted - Beauty Is You. Award-winning luxury unisex salon booking experience with immersive 3D, seamless reservations, and bespoke styling services.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
