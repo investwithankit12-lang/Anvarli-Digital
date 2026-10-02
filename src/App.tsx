@@ -226,8 +226,12 @@ function MainApp() {
         />
       )}
 
-      {/* 2. Interactive 3D Salon Background Scene */}
-      <ThreeSalonScene liteMode={liteMode} />
+      {/* 2. Interactive 3D Salon Background Scene with Scroll Choreography */}
+      <ThreeSalonScene
+        liteMode={liteMode}
+        onSelectStation={() => setBookingModalOpen(true)}
+        onOpenBooking={() => setBookingModalOpen(true)}
+      />
 
       {/* 3. Dev Mode OTP Notifications Toast Simulator */}
       <OtpDevToast />
