@@ -109,6 +109,13 @@ export const Header: React.FC<HeaderProps> = ({
         {/* Desktop Navigation Links */}
         <nav className="hidden lg:flex items-center gap-6 text-xs font-semibold uppercase tracking-wider text-[#A5B7D1]">
           <button
+            onClick={() => scrollToSection('salon-3d-experience')}
+            className="hover:text-[#FFDF78] text-[#FFDF78]/90 transition-colors flex items-center gap-1"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-[#D4AF37]" />
+            <span>3D Salon Walls</span>
+          </button>
+          <button
             onClick={() => scrollToSection('services')}
             className="hover:text-[#FFDF78] transition-colors"
           >
@@ -217,6 +224,13 @@ export const Header: React.FC<HeaderProps> = ({
       {mobileMenuOpen && (
         <div className="sm:hidden bg-[#0A111E] border-b border-[#D4AF37]/30 px-6 py-6 space-y-4 animate-in slide-in-from-top duration-200">
           <div className="grid grid-cols-2 gap-2 text-xs font-medium uppercase tracking-wider">
+            <button
+              onClick={() => scrollToSection('salon-3d-experience')}
+              className="p-2.5 rounded-lg bg-[#D4AF37]/20 border border-[#D4AF37]/40 text-left text-[#FFDF78] font-bold col-span-2 flex items-center justify-between"
+            >
+              <span>3D Salon Walls (Scroll)</span>
+              <Sparkles className="w-3.5 h-3.5" />
+            </button>
             <button
               onClick={() => scrollToSection('services')}
               className="p-2.5 rounded-lg bg-[#0E1628] text-left text-[#C8D6EC]"

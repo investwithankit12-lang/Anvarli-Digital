@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import type { ServiceItem, CategoryItem } from '../types';
-import { Check, Plus, Search, Sparkles, Tag, Scissors } from 'lucide-react';
+import { Check, Plus, Search, Sparkles, Tag, Scissors, Layers } from 'lucide-react';
+import { Services3DScrollTrack } from './Services3DScrollTrack';
 
 interface ServicesSectionProps {
   categories: CategoryItem[];
@@ -17,6 +18,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
   onToggleService,
   onOpenBooking,
 }) => {
+  const [viewMode, setViewMode] = useState<'3d' | 'grid'>('3d');
   const [selectedCategoryFilter, setSelectedCategoryFilter] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -68,9 +70,9 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
   }, [services, activeCategories, searchQuery, selectedCategoryFilter]);
 
   return (
-    <section id="services" className="relative z-10 py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <section id="services" className="relative z-10 py-12 w-full">
       {/* Section Header */}
-      <div className="text-center max-w-3xl mx-auto mb-12">
+      <div className="text-center max-w-3xl mx-auto mb-8 px-4">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#D4AF37]/15 border border-[#D4AF37]/35 text-[#FFDF78] text-xs font-semibold uppercase tracking-widest mb-3">
           <Sparkles className="w-3.5 h-3.5" />
           The Haute Salon Collection
@@ -81,77 +83,132 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
         <p className="font-['Playfair_Display'] italic text-base sm:text-lg text-[#E6DFCA] mt-2">
           Grouped by category headings • Zero advance payment required
         </p>
-      </div>
 
-      {/* Filter Tabs & Search Box */}
-      <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-10">
-        {/* Category Pills */}
-        <div className="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-2 scrollbar-none">
-          <button
-            type="button"
-            onClick={() => setSelectedCategoryFilter('all')}
-            className={`px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
-              selectedCategoryFilter === 'all'
-                ? 'bg-[#D4AF37] text-[#070B14] shadow-[0_0_15px_rgba(212,175,55,0.35)]'
-                : 'bg-[#0E1628] text-gray-300 hover:text-white border border-white/10 hover:border-[#D4AF37]/30'
-            }`}
-          >
-            All Specialties
-          </button>
-          {activeCategories.map((cat) => (
+        {/* View Mode Switcher: 3D Scroll Runway vs Categorized Price Grid */}
+        <div className="flex items-center justify-center gap-2 mt-6">
+          <div className="p-1 rounded-2xl bg-[#0D1527] border border-[#D4AF37]/40 shadow-xl flex items-center gap-1">
             <button
-              key={cat.id}
               type="button"
-              onClick={() => setSelectedCategoryFilter(cat.name)}
-              className={`px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
-                selectedCategoryFilter === cat.name
-                  ? 'bg-[#D4AF37] text-[#070B14] shadow-[0_0_15px_rgba(212,175,55,0.35)]'
-                  : 'bg-[#0E1628] text-gray-300 hover:text-white border border-white/10 hover:border-[#D4AF37]/30'
+              onClick={() => setViewMode('3d')}
+              className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-1.5 cursor-pointer ${
+                viewMode === '3d'
+                  ? 'bg-gradient-to-r from-[#D4AF37] to-[#AA7C11] text-[#070B14] shadow-[0_0_20px_rgba(212,175,55,0.4)]'
+                  : 'text-gray-400 hover:text-white'
               }`}
             >
-              {cat.name}
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>3D Scroll Runway</span>
             </button>
-          ))}
-        </div>
-
-        {/* Live Search Input */}
-        <div className="relative w-full md:w-72 shrink-0">
-          <Search className="absolute left-3.5 top-2.5 w-4 h-4 text-gray-400" />
-          <input
-            type="text"
-            placeholder="Search service, facial, spa..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-[#0E1628] border border-[#D4AF37]/30 rounded-xl pl-10 pr-4 py-2 text-xs text-white placeholder-gray-400 focus:outline-none focus:border-[#D4AF37]"
-          />
+            <button
+              type="button"
+              onClick={() => setViewMode('grid')}
+              className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-1.5 cursor-pointer ${
+                viewMode === 'grid'
+                  ? 'bg-gradient-to-r from-[#D4AF37] to-[#AA7C11] text-[#070B14] shadow-[0_0_20px_rgba(212,175,55,0.4)]'
+                  : 'text-gray-400 hover:text-white'
+              }`}
+            >
+              <Layers className="w-3.5 h-3.5" />
+              <span>Full Price Catalog ({services.length})</span>
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Selected Items Floating Action Bar */}
-      {selectedServiceIds.length > 0 && (
-        <div className="sticky top-24 z-30 mb-8 p-4 rounded-2xl bg-[#0D1527]/95 border-2 border-[#D4AF37] shadow-[0_10px_40px_rgba(212,175,55,0.3)] backdrop-blur-xl flex items-center justify-between animate-in slide-in-from-top-4 duration-300">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-[#D4AF37] text-[#070B14] flex items-center justify-center font-bold text-sm">
-              {selectedServiceIds.length}
+      {/* 3D SCROLL RUNWAY VIEW */}
+      {viewMode === '3d' ? (
+        <div className="w-full">
+          <Services3DScrollTrack
+            services={services}
+            categories={activeCategories}
+            selectedServiceIds={selectedServiceIds}
+            onToggleService={onToggleService}
+            onOpenBooking={onOpenBooking}
+          />
+
+          {/* Prompt to switch to full grid catalog */}
+          <div className="max-w-2xl mx-auto text-center px-4 py-8">
+            <button
+              onClick={() => setViewMode('grid')}
+              className="px-6 py-3 rounded-2xl bg-[#0D1527] hover:bg-[#13203A] border border-[#D4AF37]/50 text-[#FFDF78] text-xs font-bold uppercase tracking-wider transition-all shadow-xl flex items-center justify-center gap-2 mx-auto cursor-pointer"
+            >
+              <Search className="w-4 h-4" />
+              <span>Explore All {services.length} Services in Full Price Grid</span>
+            </button>
+          </div>
+        </div>
+      ) : (
+        /* COMPREHENSIVE CATEGORIZED PRICE GRID VIEW */
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Filter Tabs & Search Box */}
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-10">
+            {/* Category Pills */}
+            <div className="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-2 scrollbar-none">
+              <button
+                type="button"
+                onClick={() => setSelectedCategoryFilter('all')}
+                className={`px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
+                  selectedCategoryFilter === 'all'
+                    ? 'bg-[#D4AF37] text-[#070B14] shadow-[0_0_15px_rgba(212,175,55,0.35)]'
+                    : 'bg-[#0E1628] text-gray-300 hover:text-white border border-white/10 hover:border-[#D4AF37]/30'
+                }`}
+              >
+                All Specialties
+              </button>
+              {activeCategories.map((cat) => (
+                <button
+                  key={cat.id}
+                  type="button"
+                  onClick={() => setSelectedCategoryFilter(cat.name)}
+                  className={`px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
+                    selectedCategoryFilter === cat.name
+                      ? 'bg-[#D4AF37] text-[#070B14] shadow-[0_0_15px_rgba(212,175,55,0.35)]'
+                      : 'bg-[#0E1628] text-gray-300 hover:text-white border border-white/10 hover:border-[#D4AF37]/30'
+                  }`}
+                >
+                  {cat.name}
+                </button>
+              ))}
             </div>
-            <div>
-              <span className="text-xs text-gray-400 uppercase tracking-wider block">
-                Selected for Booking
-              </span>
-              <span className="text-sm font-semibold text-[#FFDF78]">
-                {selectedServiceIds.length} {selectedServiceIds.length === 1 ? 'service' : 'services'} added to pass
-              </span>
+
+            {/* Live Search Input */}
+            <div className="relative w-full md:w-72 shrink-0">
+              <Search className="absolute left-3.5 top-2.5 w-4 h-4 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search service, facial, spa..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full bg-[#0E1628] border border-[#D4AF37]/30 rounded-xl pl-10 pr-4 py-2 text-xs text-white placeholder-gray-400 focus:outline-none focus:border-[#D4AF37]"
+              />
             </div>
           </div>
 
-          <button
-            onClick={onOpenBooking}
-            className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#D4AF37] via-[#FFF0A5] to-[#AA7C11] text-[#070B14] font-bold text-xs uppercase tracking-wider hover:brightness-110 active:scale-95 transition-all shadow-md"
-          >
-            Continue to Slot Selection
-          </button>
-        </div>
-      )}
+          {/* Selected Items Floating Action Bar */}
+          {selectedServiceIds.length > 0 && (
+            <div className="sticky top-24 z-30 mb-8 p-4 rounded-2xl bg-[#0D1527]/95 border-2 border-[#D4AF37] shadow-[0_10px_40px_rgba(212,175,55,0.3)] backdrop-blur-xl flex items-center justify-between animate-in slide-in-from-top-4 duration-300">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-[#D4AF37] text-[#070B14] flex items-center justify-center font-bold text-sm">
+                  {selectedServiceIds.length}
+                </div>
+                <div>
+                  <span className="text-xs text-gray-400 uppercase tracking-wider block">
+                    Selected for Booking
+                  </span>
+                  <span className="text-sm font-semibold text-[#FFDF78]">
+                    {selectedServiceIds.length} {selectedServiceIds.length === 1 ? 'service' : 'services'} added to pass
+                  </span>
+                </div>
+              </div>
+
+              <button
+                onClick={onOpenBooking}
+                className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#D4AF37] via-[#FFF0A5] to-[#AA7C11] text-[#070B14] font-bold text-xs uppercase tracking-wider hover:brightness-110 active:scale-95 transition-all shadow-md"
+              >
+                Continue to Slot Selection
+              </button>
+            </div>
+          )}
 
       {/* Services List Grouped Under Category Headings */}
       {groupedServices.length === 0 ? (
@@ -288,6 +345,8 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
               </div>
             </div>
           ))}
+        </div>
+      )}
         </div>
       )}
     </section>

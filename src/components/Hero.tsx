@@ -63,9 +63,9 @@ export const Hero: React.FC<HeroProps> = ({
   };
 
   const handleStart3DJourney = () => {
-    const servicesEl = document.getElementById('services');
-    if (servicesEl) {
-      servicesEl.scrollIntoView({ behavior: 'smooth' });
+    const el = document.getElementById('salon-3d-experience');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
     } else {
       window.scrollBy({ top: window.innerHeight * 0.85, behavior: 'smooth' });
     }

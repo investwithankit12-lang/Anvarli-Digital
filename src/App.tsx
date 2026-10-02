@@ -41,6 +41,7 @@ import { PhonePromptModal } from './components/PhonePromptModal';
 import { AdminPanel } from './components/AdminPanel';
 import { OtpDevToast } from './components/OtpDevToast';
 import { MenuFlyerModal } from './components/MenuFlyerModal';
+import { Salon3DScrollTrack } from './components/Salon3DScrollTrack';
 
 function MainApp() {
   const { profile } = useAuth();
@@ -226,12 +227,8 @@ function MainApp() {
         />
       )}
 
-      {/* 2. Interactive 3D Salon Background Scene with Scroll Choreography */}
-      <ThreeSalonScene
-        liteMode={liteMode}
-        onSelectStation={() => setBookingModalOpen(true)}
-        onOpenBooking={() => setBookingModalOpen(true)}
-      />
+      {/* 2. Ambient Luxury 3D Salon Atmosphere */}
+      <ThreeSalonScene liteMode={liteMode} />
 
       {/* 3. Dev Mode OTP Notifications Toast Simulator */}
       <OtpDevToast />
@@ -257,9 +254,23 @@ function MainApp() {
           }}
           liteMode={liteMode}
           onSelectStation={(stationName) => {
-            // If user clicked a station in 3D, optionally preselect matching service or open booking
             setBookingModalOpen(true);
           }}
+        />
+
+        {/* 3D Spatial Scroll Track (520vh 3D Perspective Tunnel from Reference) */}
+        <Salon3DScrollTrack
+          onOpenBooking={() => setBookingModalOpen(true)}
+          onSelectCategory={(categoryName) => {
+            const srv = services.find((s) =>
+              s.category.toLowerCase().includes(categoryName.toLowerCase()) ||
+              categoryName.toLowerCase().includes(s.category.toLowerCase())
+            );
+            if (srv) {
+              setSelectedServiceIds([srv.id]);
+            }
+          }}
+          liteMode={liteMode}
         />
 
         {/* Seasonal Offer Banner */}
